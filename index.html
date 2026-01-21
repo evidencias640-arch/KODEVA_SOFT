@@ -1,0 +1,2444 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingeniero de Sistemas - Servicios Profesionales</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #F2F1EF;
+            --color-secondary: #B1A6A4;
+            --color-gold: #a37c11;
+            --color-accent: #697184;
+            --color-light: #D8CFD0;
+            --color-dark: #413F3D;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-dark);
+            overflow-x: hidden;
+            background: var(--color-primary);
+        }
+
+        /* Navegación */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(242, 241, 239, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            background: rgba(242, 241, 239, 0.98);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--color-accent);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-dark);
+            font-weight: 400;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--color-dark);
+            transition: all 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-light) 100%);
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 900;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--color-dark);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--color-accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(105, 113, 132, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(105, 113, 132, 0.4);
+        }
+
+        /* Canvas 3D Background */
+        #canvas3d {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Social Links */
+        .social-links {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            background: var(--color-accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(105, 113, 132, 0.3);
+        }
+
+        .social-links a:hover {
+            transform: scale(1.1);
+            background: var(--color-dark);
+        }
+
+        /* Services Section */
+        .services {
+            padding: 8rem 2rem;
+            background: white;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 4rem);
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--color-gold);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(black);
+            margin-bottom: 4rem;
+            font-size: 1.2rem;
+        }
+
+        .services-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .service-card {
+            padding: 3rem 2rem;
+            background: var(--color-primary);
+            border-radius: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: var(--color-accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--color-dark);
+        }
+
+        .service-card p {
+            color: var(--color-secondary);
+            line-height: 1.6;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--color-light) 0%, var(--color-primary) 100%);
+        }
+
+        .projects-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--color-light) 0%, var(--color-primary) 100%);
+        }
+
+        .projects-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, rgba(105, 113, 132, 0.9), rgba(177, 166, 164, 0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(105, 113, 132, 0.7), rgba(177, 166, 164, 0.7));
+            z-index: 1;
+        }
+
+        .project-image i {
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-card:nth-child(1) .project-image {
+            background-image: url('https://images.unsplash.com/photo-1557821552-17105176677c?w=800');
+        }
+
+        .project-card:nth-child(2) .project-image {
+            background-image: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800');
+        }
+
+        .project-card:nth-child(3) .project-image {
+            background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800');
+        }
+
+        .project-card:nth-child(4) .project-image {
+            background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800');
+        }
+
+        .project-card:nth-child(5) .project-image {
+            background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800');
+        }
+
+        .project-card:nth-child(6) .project-image {
+            background-image: url('https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=800');
+        }
+
+        .project-info {
+            padding: 2rem;
+        }
+
+        .project-info h3 {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--color-accent);
+        }
+
+        .project-info p {
+            color: var(--color-secondary);
+            line-height: 1.6;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 8rem 2rem;
+            background: white;
+        }
+
+        /* Colores de marca para iconos */
+        .tech-item i.fa-telegram {
+            color: #0088cc;
+        }
+
+        .tech-item i.fa-python {
+            color: #3776ab;
+        }
+
+        .tech-item i.fa-js {
+            color: #f7df1e;
+        }
+
+        .tech-item i.fa-laravel {
+            color: #ff2d20;
+        }
+
+        .tech-item i.fa-aws {
+            color: #ff9900;
+        }
+
+        .tech-item i.fa-css3-alt {
+            color: #264de4;
+        }
+
+        /* Estilo para que las tarjetas de testimonios resalten */
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.85) !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            /* Un toque dorado sutil en el borde */
+            transition: all 0.3s ease;
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--color-primary);
+            padding: 2.5rem;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            font-family: var(--font-heading);
+            font-size: 6rem;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            color: var(--color-accent);
+            opacity: 0.2;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: var(--color-dark);
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .author-info h4 {
+            font-family: var(--font-heading);
+            color: var(--color-accent);
+        }
+
+        .author-info p {
+            font-size: 0.9rem;
+            color: var(--color-secondary);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 2rem;
+            background: var(--color-accent);
+            color: white;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Contenedor de la sección relativo */
+        .stats {
+            position: relative;
+            overflow: hidden;
+            /* Para que los globos no se salgan de la sección */
+            padding: 60px 0;
+        }
+
+        /* Estilo base del globo */
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            /* Empiezan debajo de la sección */
+            width: 40px;
+            height: 50px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            z-index: 1;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: floatUp linear infinite;
+        }
+
+        /* Hilo del globo */
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            width: 2px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animación de subida con balanceo */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+
+            25% {
+                transform: translateY(-25vh) translateX(15px) rotate(5deg);
+            }
+
+            50% {
+                transform: translateY(-50vh) translateX(-15px) rotate(-5deg);
+            }
+
+            75% {
+                transform: translateY(-75vh) translateX(10px) rotate(2deg);
+            }
+
+            100% {
+                transform: translateY(-110vh) translateX(-10px) rotate(-2deg);
+            }
+        }
+
+        /* Asegurar que los números estén por encima */
+        .stats-grid {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 8rem 2rem;
+            background: var(--color-primary);
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--color-light);
+            border-radius: 10px;
+            font-family: var(--font-body);
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: var(--color-dark);
+            transform: translateY(-2px);
+        }
+
+        .map-container {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            min-height: 400px;
+            background: var(--color-secondary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                right: -100%;
+                top: 80px;
+                flex-direction: column;
+                background: var(--color-primary);
+                width: 100%;
+                padding: 2rem;
+                transition: right 0.3s;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .social-links {
+                right: 1rem;
+                gap: 1rem;
+            }
+
+            .social-links a {
+                width: 40px;
+                height: 40px;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                padding: 120px 0 60px;
+            }
+        }
+
+        /* Sección de Servicios renovada */
+        .services {
+            position: relative;
+            overflow: hidden;
+            background-color: #0d0d0d !important;
+            /* Negro profundo para el contraste */
+            padding: 100px 0;
+        }
+
+        #canvas-codigo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.25;
+            /* Bajamos la opacidad para que no "grite" */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Tarjetas de servicios tipo "Glassmorphism" para que se lean perfecto */
+        .service-card {
+            background: rgba(255, 255, 255, 0.03) !important;
+            backdrop-filter: blur(12px);
+            /* Efecto de vidrio esmerilado */
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 10;
+            /* Siempre por encima del código */
+        }
+
+        .service-card h3,
+        .service-card p,
+        .services .section-title {
+            color: #ffffff !important;
+            /* Texto siempre blanco puro para legibilidad */
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .service-icon {
+            color: #D4AF37 !important;
+            /* Iconos en dorado para resaltar */
+        }
+
+        .project-image {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Capa oscura para que el icono resalte sobre la imagen */
+        .project-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(65, 63, 61, 0.6);
+            /* Overlay oscuro profesional */
+            z-index: 1;
+        }
+
+        .project-image i {
+            font-size: 4rem;
+            color: white;
+            position: relative;
+            z-index: 2;
+            /* Por encima del overlay y la imagen */
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Animations */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .service-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .service-card:nth-child(2) .service-icon {
+            animation-delay: 0.5s;
+        }
+
+        .service-card:nth-child(3) .service-icon {
+            animation-delay: 1s;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-secondary));
+            z-index: 1001;
+            transition: width 0.1s;
+        }
+
+        /* About Section */
+        .about {
+            padding: 8rem 2rem;
+            background: var(--color-primary);
+        }
+
+        .about-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .about-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-icon {
+            font-size: 4rem;
+            color: var(--color-accent);
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .about-card h3 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .about-card p {
+            color: var(--color-secondary);
+            line-height: 1.8;
+        }
+
+        /* Contenedor específico para Sobre Nosotros */
+        #nosotros {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .geometric-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Las tarjetas deben estar por encima */
+        .about-grid,
+        .section-title,
+        .section-subtitle {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Estilo de las figuras: más opacidad y velocidad */
+        .shape {
+            position: absolute;
+            opacity: 0.3;
+            /* Aumentado para que los colores se vean mejor */
+            animation: moveSideways 10s linear infinite;
+            /* Bajado de 25s a 10s (Mucho más rápido) */
+        }
+
+        @keyframes moveSideways {
+            0% {
+                transform: translateX(-20vw) rotate(0deg);
+            }
+
+            100% {
+                transform: translateX(120vw) rotate(360deg);
+            }
+        }
+
+        /* Why Choose Section */
+
+        #canvas-rayos {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* Permite hacer clic en las tarjetas */
+            z-index: 1;
+        }
+
+        .why-choose {
+            position: relative;
+            /* Necesario para el canvas absoluto */
+            overflow: hidden;
+            background: #1a1a1a;
+            /* Un fondo oscuro hace que los rayos resalten más */
+        }
+
+        .why-grid {
+            position: relative;
+            z-index: 2;
+            /* Por encima de los rayos */
+        }
+
+        .why-choose {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-dark) 100%);
+        }
+
+        .why-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .why-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+
+        .why-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .why-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .why-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        .why-icon {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .why-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .why-card p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+        }
+
+        /* Technologies Section */
+        .technologies {
+            padding: 8rem 2rem;
+            background: white;
+            overflow: hidden;
+        }
+
+        .tech-carousel-container {
+            max-width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-top: 4rem;
+        }
+
+        .tech-carousel-container::before,
+        .tech-carousel-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .tech-carousel-container::before {
+            left: 0;
+            background: linear-gradient(90deg, white, transparent);
+        }
+
+        .tech-carousel-container::after {
+            right: 0;
+            background: linear-gradient(-90deg, white, transparent);
+        }
+
+        .tech-carousel {
+            display: flex;
+            gap: 4rem;
+            animation: scroll 40s linear infinite;
+            width: fit-content;
+        }
+
+        .tech-carousel:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .tech-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 150px;
+            padding: 2rem;
+            background: var(--color-primary);
+            border-radius: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tech-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            background: var(--color-accent);
+        }
+
+        .tech-item:hover i {
+            color: white;
+        }
+
+        .tech-item:hover span {
+            color: white;
+        }
+
+        .tech-item i {
+            font-size: 4rem;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .tech-item span {
+            font-weight: 700;
+            color: var(--color-dark);
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        /* Colores específicos para cada tecnología */
+        .tech-item i.fa-telegram {
+            color: #0088cc;
+        }
+
+        .tech-item i.fa-project-diagram {
+            color: #ff6d5a;
+        }
+
+        /* n8n */
+        .tech-item i.fa-python {
+            color: #3776ab;
+        }
+
+        .tech-item i.fa-js {
+            color: #f7df1e;
+            background: black;
+            line-height: 1;
+        }
+
+        /* JS suele ser negro con amarillo */
+        .tech-item i.fa-css3-alt {
+            color: #264de4;
+        }
+
+        .tech-item i.fa-chart-bar {
+            color: #f2c811;
+        }
+
+        /* Power BI / BI */
+        .tech-item i.fa-database {
+            color: #336791;
+        }
+
+        /* SQL */
+        .tech-item i.fa-php {
+            color: #777bb4;
+        }
+
+        .tech-item i.fa-file-excel {
+            color: #1d6f42;
+        }
+
+        .tech-item i.fa-network-wired {
+            color: #15045f;
+        }
+
+        /* Cisco / TNS */
+        .tech-item i.fa-server {
+            color: #697184;
+        }
+
+        /* Mikrotik / Hostinger */
+        .tech-item i.fa-ethernet {
+            color: #ff9900;
+        }
+
+        .tech-item i.fa-video {
+            color: #e50914;
+        }
+
+        /* DVR */
+        .tech-item i.fa-laravel {
+            color: #ff2d20;
+        }
+
+        .tech-item i.fa-code {
+            color: #000000;
+        }
+
+        /* Next.js */
+        .tech-item i.fa-cloud {
+            color: #00a1e0;
+        }
+
+        .tech-item i.fa-aws {
+            color: #ff9900;
+        }
+
+        /* Estilo base para que los iconos resalten */
+        .tech-item i {
+            font-size: 3rem;
+            /* Tamaño del icono */
+            margin-bottom: 10px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        /* Efecto al pasar el mouse */
+        .tech-item:hover i {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+        }
+
+        /* Estilo del texto debajo del icono */
+        .tech-item span {
+            display: block;
+            font-weight: bold;
+            color: var(--color-dark);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">KV</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#porque-elegirnos">Eligenos</a></li>
+                <li><a href="#tecnologias">Tecnologias</a></li>
+                <li><a href="#proyectos">Proyectos</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="https://evidencias640-arch.github.io/Portafolio-Profesional-Virtual/">Ingeniero</a></li>
+            </ul>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="social-links">
+        <a href="https://www.instagram.com/stevenpineda.18?igsh=MWMwZm11aDVhZnJhMA==" target="_blank"
+            aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://x.com/pineda1289joel" target="_blank" aria-label="X"><i class="fas fa-x"></i></a>
+        <a href="https://github.com/evidencias640-arch" target="_blank" aria-label="GitHub"><i
+                class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/joel-steven-pineda-rincon-448157296?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+            target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://evidencias640-arch.github.io/Portafolio-Profesional-Virtual/" target="_blank"
+            aria-label="CV"><i class="fas fa-address-card"></i></a>
+    </div>
+
+    <section class="hero" id="inicio">
+        <canvas id="canvas3d"></canvas>
+        <div class="hero-content" data-aos="fade-up">
+            <h1>KODEVA</h1>
+            <p>Codigo que impulsa la evolución digital</p>
+            <p>Soluciones tecnológicas innovadoras y profesionales</p>
+            <a href="#servicios" class="cta-button">Descubre mis servicios</a>
+        </div>
+    </section>
+
+    <section class="services" id="servicios">
+        <canvas id="canvas-codigo"></canvas>
+        <h2 class="section-title" data-aos="fade-up">Servicios Profesionales</h2>
+        <p class="section-subtitle" data-aos="fade-up">Soluciones tecnológicas integrales para tu negocio</p>
+
+        <div class="services-grid">
+            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-icon"><i class="fas fa-code"></i></div>
+                <h3>Desarrollo Web</h3>
+                <p>Creación de sitios web profesionales y software personalizado con tecnologías modernas y más.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-icon"><i class="fas fa-cloud"></i></div>
+                <h3>Cloud & DevOps</h3>
+                <p>Gestión de infraestructura en la nube (AWS, Google Cloud, Azure), implementación de CI/CD y migración
+                    de sistemas a entornos cloud.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Ciberseguridad</h3>
+                <p>Auditorías de seguridad, pentesting, implementación de protocolos de protección y cumplimiento de
+                    normativas de privacidad de datos.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-icon"><i class="fas fa-robot"></i></div>
+                <h3>Automatización</h3>
+                <p>Scripts y bots para automatizar procesos repetitivos, optimización de workflows y mejora de la
+                    productividad empresarial.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Análisis de Datos & BI</h3>
+                <p>Extracción de insights valiosos mediante SQL, Python y herramientas de Business Intelligence como
+                    Tableau y Power BI.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fas fa-bullhorn"></i></div>
+                <h3>Marketing Digital</h3>
+                <p>SEO, campañas publicitarias en Google Ads y redes sociales, análisis de métricas y estrategias de
+                    crecimiento digital.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fas fa-wifi"></i></div>
+                <h3>Administración de Redes</h3>
+                <p>Monitoreo, configuración y troubleshooting de redes (ej. VLANs, VPNs), usando herramientas como Cisco
+                    o Wireshark. Servicio mensual para mantenimiento continuo</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fas fa-ethernet"></i></div>
+                <h3>Infraestructura en Redes</h3>
+                <p>Diseño, implementación y optimización de redes locales (LAN), inalámbricas (Wi-Fi) o híbridas,
+                    incluyendo hardware como routers, switches y firewalls.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fas fa-circle-info"></i></div>
+                <h3>Auditorias Informaticas</h3>
+                <p>Evaluaciones exhaustivas de sistemas, redes y software para detectar vulnerabilidades, con reportes
+                    detallados y recomendaciones. Incluye pentesting ético y cumplimiento normativo.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fas fa-lock-open"></i></div>
+                <h3>Gestión de Datos y Privacidad</h3>
+                <p>Asegura normativas como GDPR o leyes colombianas de datos.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fas fa-ticket"></i></div>
+                <h3>Asesorias Informaticas</h3>
+                <p>Consultoría en TI para empresas o particulares, cubriendo adopción de tecnologías, optimización de
+                    sistemas y transformación digital.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fas fa-qrcode"></i></div>
+                <h3>Consultoria en TI General</h3>
+                <p>Asesoramiento en planificación de proyectos, selección de herramientas y resolución de problemas.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+                <h3>Soporte y Mantenimiento</h3>
+                <p>Actualizaciones, troubleshooting y backups regulares.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h3>Asesorias en Estudios</h3>
+                <p>Tutorías personalizadas en matemáticas, física, programación, bases de datos, y arquitectura web.
+                    Ideal para estudiantes o profesionales en formación.</p>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon"><i class="fa-solid fa-minimize"></i></div>
+                <h3>Analisis Financiero</h3>
+                <p>Analisis financiero, Costos, Nomina, Retencion en la Fuente, Declaracion de Renta y Afines.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="nosotros">
+        <div class="geometric-bg" id="bg-nosotros"></div>
+        <h2 class="section-title" data-aos="fade-up">Sobre Nosotros</h2>
+        <p class="section-subtitle" data-aos="fade-up">Conoce nuestra esencia y propósito</p>
+
+        <div class="about-grid">
+            <div class="about-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="about-icon"><i class="fas fa-bullseye"></i></div>
+                <h3>Misión</h3>
+                <p>Transformar ideas en soluciones tecnológicas innovadoras que impulsen el crecimiento y la
+                    transformación digital de nuestros clientes, entregando productos de alta calidad que superen sus
+                    expectativas y generen valor real a sus negocios.</p>
+            </div>
+
+            <div class="about-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="about-icon"><i class="fas fa-eye"></i></div>
+                <h3>Visión</h3>
+                <p>Ser reconocidos como el socio tecnológico de referencia en la región, liderando la innovación en
+                    desarrollo de software, ciberseguridad y transformación digital, creando un impacto positivo en cada
+                    proyecto que emprendemos.</p>
+            </div>
+
+            <div class="about-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="about-icon"><i class="fas fa-gem"></i></div>
+                <h3>Valores</h3>
+                <p>Excelencia técnica, innovación constante, integridad profesional, compromiso con el cliente, trabajo
+                    en equipo, aprendizaje continuo y responsabilidad social. Cada proyecto refleja nuestra pasión por
+                    la tecnología y el servicio excepcional.</p>
+            </div>
+
+            <div class="about-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="about-icon"><i class="fas fa-handshake"></i></div>
+                <h3>Compromisos</h3>
+                <p>Cumplimiento de plazos, calidad garantizada, soporte técnico continuo, actualización constante en
+                    tecnologías emergentes, transparencia en comunicación, seguridad de datos, y soluciones escalables
+                    que crezcan con tu negocio.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-choose" id="porque-elegirnos">
+        <canvas id="canvas-rayos"></canvas>
+        <h2 class="section-title" data-aos="fade-up" style="color: white;">¿Por Qué Elegirnos?</h2>
+        <h2 class="section-title" data-aos="fade-up" style="color: white;">¿Por Qué Elegirnos?</h2>
+        <p class="section-subtitle" data-aos="fade-up" style="color: rgba(255,255,255,0.8);">Razones que nos hacen tu
+            mejor opción tecnológica</p>
+
+        <div class="why-grid">
+            <div class="why-card" data-aos="fade-right" data-aos-delay="100">
+                <div class="why-number">01</div>
+                <div class="why-icon"><i class="fas fa-trophy"></i></div>
+                <h3>Experiencia Comprobada</h3>
+                <p>Más de 5 años desarrollando soluciones tecnológicas exitosas para empresas de diversos sectores.
+                    Nuestro portafolio habla por sí solo.</p>
+            </div>
+
+            <div class="why-card" data-aos="fade-right" data-aos-delay="200">
+                <div class="why-number">02</div>
+                <div class="why-icon"><i class="fas fa-rocket"></i></div>
+                <h3>Tecnología de Vanguardia</h3>
+                <p>Utilizamos las últimas tecnologías y mejores prácticas del mercado para garantizar soluciones
+                    modernas, escalables y eficientes.</p>
+            </div>
+
+            <div class="why-card" data-aos="fade-left" data-aos-delay="100">
+                <div class="why-number">03</div>
+                <div class="why-icon"><i class="fas fa-headset"></i></div>
+                <h3>Soporte 24/7</h3>
+                <p>Estamos disponibles cuando nos necesites. Nuestro equipo de soporte técnico responde rápidamente para
+                    resolver cualquier inconveniente.</p>
+            </div>
+
+            <div class="why-card" data-aos="fade-left" data-aos-delay="200">
+                <div class="why-number">04</div>
+                <div class="why-icon"><i class="fas fa-dollar-sign"></i></div>
+                <h3>Precios Competitivos</h3>
+                <p>Calidad premium a precios justos. Ofrecemos planes flexibles y personalizados que se ajustan a tu
+                    presupuesto sin comprometer la excelencia.</p>
+            </div>
+
+            <div class="why-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="why-number">05</div>
+                <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Seguridad Garantizada</h3>
+                <p>Implementamos los más altos estándares de seguridad en cada proyecto. Tu información y la de tus
+                    clientes está completamente protegida.</p>
+            </div>
+
+            <div class="why-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="why-number">06</div>
+                <div class="why-icon"><i class="fas fa-users"></i></div>
+                <h3>Enfoque Personalizado</h3>
+                <p>Cada cliente es único. Desarrollamos soluciones a medida que se adaptan perfectamente a tus
+                    necesidades específicas y objetivos de negocio.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="technologies" id="tecnologias">
+        <h2 class="section-title" data-aos="fade-up">Tecnologías de Desarrollo</h2>
+        <p class="section-subtitle" data-aos="fade-up">Herramientas y plataformas que dominamos</p>
+
+        <div class="tech-carousel-container" data-aos="fade-up">
+            <div class="tech-carousel">
+                <div class="tech-item">
+                    <i class="fab fa-telegram"></i>
+                    <span>Telegram</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>N8N</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-python"></i>
+                    <span>Python</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-js"></i>
+                    <span>JavaScript</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-css3-alt"></i>
+                    <span>CSS3</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>BI</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-database"></i>
+                    <span>SQL</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-php"></i>
+                    <span>PHP</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-file-excel"></i>
+                    <span>Office</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-network-wired"></i>
+                    <span>TNS</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-server"></i>
+                    <span>Mikrotik</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-network-wired"></i>
+                    <span>Cisco</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-ethernet"></i>
+                    <span>IP</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-video"></i>
+                    <span>DVR</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-laravel"></i>
+                    <span>Laravel</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-code"></i>
+                    <span>Next.js</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-cloud"></i>
+                    <span>Cloud</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-aws"></i>
+                    <span>AWS</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-server"></i>
+                    <span>Hostinger</span>
+                </div>
+
+                <!-- Duplicado para efecto infinito -->
+                <div class="tech-item">
+                    <i class="fab fa-telegram"></i>
+                    <span>Telegram</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>N8N</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-python"></i>
+                    <span>Python</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-js"></i>
+                    <span>JavaScript</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-css3-alt"></i>
+                    <span>CSS3</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>BI</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-database"></i>
+                    <span>SQL</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-php"></i>
+                    <span>PHP</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-file-excel"></i>
+                    <span>Office</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-network-wired"></i>
+                    <span>TNS</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-server"></i>
+                    <span>Mikrotik</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-network-wired"></i>
+                    <span>Cisco</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-ethernet"></i>
+                    <span>IP</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-video"></i>
+                    <span>DVR</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-laravel"></i>
+                    <span>Laravel</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-code"></i>
+                    <span>Next.js</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-cloud"></i>
+                    <span>Cloud</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-aws"></i>
+                    <span>AWS</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-server"></i>
+                    <span>Hostinger</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item" data-aos="fade-up">
+                <h3 class="counter" data-target="18">0</h3>
+                <p>Proyectos Completados</p>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+                <h3 class="counter" data-target="22">0</h3>
+                <p>Clientes Satisfechos</p>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="counter" data-target="4">0</h3>
+                <p>Años de Experiencia</p>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+                <h3 class="counter" data-target="24">0</h3>
+                <p>Soporte 24/7</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects" id="proyectos">
+        <h2 class="section-title" data-aos="fade-up">Proyectos Destacados</h2>
+        <p class="section-subtitle" data-aos="fade-up">Algunos de mis trabajos más recientes</p>
+
+        <div class="projects-grid">
+            <div class="project-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="project-image"><i class="fas fa-shopping-cart"></i></div>
+                <div class="project-info">
+                    <h3>E-Commerce Completo</h3>
+                    <p>Plataforma de comercio electrónico con pasarela de pagos, gestión de inventario y panel
+                        administrativo. Desarrollado con React y Node.js.</p>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="project-image"><i class="fas fa-mobile-alt"></i></div>
+                <div class="project-info">
+                    <h3>App Móvil Empresarial</h3>
+                    <p>Aplicación móvil para gestión de recursos humanos con funcionalidades de seguimiento de tareas y
+                        comunicación interna.</p>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="project-image"><i class="fas fa-database"></i></div>
+                <div class="project-info">
+                    <h3>Sistema de Gestión CRM</h3>
+                    <p>Software personalizado para administración de clientes, ventas y reportes analíticos en tiempo
+                        real con dashboard interactivo.</p>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="project-image"><i class="fas fa-lock"></i></div>
+                <div class="project-info">
+                    <h3>Auditoría de Seguridad</h3>
+                    <p>Evaluación completa de vulnerabilidades para empresa financiera, implementación de medidas de
+                        protección y certificación de seguridad.</p>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="project-image"><i class="fas fa-chart-pie"></i></div>
+                <div class="project-info">
+                    <h3>Dashboard Analítico</h3>
+                    <p>Panel de análisis de datos en tiempo real con visualizaciones interactivas y reportes
+                        automatizados para toma de decisiones estratégicas.</p>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="project-image"><i class="fas fa-cogs"></i></div>
+                <div class="project-info">
+                    <h3>Automatización de Procesos</h3>
+                    <p>Sistema de automatización para empresa manufacturera que redujo tiempos de producción en 40%
+                        mediante scripts inteligentes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonios">
+        <h2 class="section-title" data-aos="fade-up">Clientes Satisfechos</h2>
+        <p class="section-subtitle" data-aos="fade-up">Lo que dicen quienes han trabajado conmigo</p>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <p class="testimonial-text">Excelente profesional. Desarrolló nuestra plataforma web superando todas las
+                    expectativas. Su atención al detalle y compromiso con los plazos fue impecable.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: #D4AF37; color: #000;">MC</div>
+                    <div class="author-info">
+                        <h4>María Contreras</h4>
+                        <p>CEO, TechStart Colombia</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                <p class="testimonial-text">La migración de nuestros sistemas a la nube fue perfecta. Ahora operamos con
+                    mayor eficiencia y seguridad. Totalmente recomendado para proyectos complejos.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: #D4AF37; color: #000;">JR</div>
+                    <div class="author-info">
+                        <h4>Javier Rodríguez</h4>
+                        <p>CTO, Soluciones Digitales</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                <p class="testimonial-text">Su experiencia en ciberseguridad salvó a nuestra empresa de múltiples
+                    vulnerabilidades. La auditoría fue exhaustiva y las soluciones implementadas son robustas.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: #D4AF37; color: #000;">LP</div>
+                    <div class="author-info">
+                        <h4>Laura Pérez</h4>
+                        <p>Directora IT, Banco Regional</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="400">
+                <p class="testimonial-text">"Buscábamos un software a medida que integrara todos nuestros departamentos
+                    y el resultado fue un ERP robusto y escalable. Su capacidad para analizar datos y convertirlos en
+                    insights es brillante."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: #D4AF37; color: #000;">LP</div>
+                    <div class="author-info">
+                        <h4>Laura Paredes</h4>
+                        <p>Gerente de Operaciones, Retail Group SA</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="500">
+                <p class="testimonial-text">"Logró migrar toda nuestra infraestructura a AWS sin un solo minuto de
+                    downtime. Su dominio de DevOps y la automatización de procesos nos permitió reducir costos
+                    operativos en un 30%."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: #D4AF37; color: #000;">RA</div>
+                    <div class="author-info">
+                        <h4>Ricardo Arenas</h4>
+                        <p>CTO, Global Logistics Solutions</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="600">
+                <p class="testimonial-text">"La auditoría de seguridad y el pentesting realizado fueron fundamentales
+                    para identificar brechas críticas. Ahora cumplimos al 100% con la Ley de Protección de Datos con
+                    total tranquilidad."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: #D4AF37; color: #000;">JG</div>
+                    <div class="author-info">
+                        <h4>Julián Gómez</h4>
+                        <p>Director de TI, Financiera del Norte</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="contact" id="contacto">
+        <h2 class="section-title" data-aos="fade-up">Contáctanos</h2>
+        <p class="section-subtitle" data-aos="fade-up">¿Listo para llevar tu proyecto al siguiente nivel?</p>
+
+        <div class="contact-container">
+            <div class="contact-form" data-aos="fade-right">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Nombre Completo</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Teléfono</label>
+                        <input type="tel" id="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Enviar Mensaje</button>
+                </form>
+            </div>
+
+            <div class="map-container" data-aos="fade-left">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126771.07916935825!2d-72.53977!3d7.8939447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e6645f888672fd1%3A0x45dc5078edf7708d!2sC%C3%BAcuta%2C%20Norte%20de%20Santander%2C%20Colombia!5e0!3m2!1ses!2s!4v1234567890"
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Ingeniero de Sistemas. Todos los derechos reservados.</p>
+        <p>Joel Steven - KODEVA.</p>
+        <p>Cúcuta, Norte de Santander, Colombia</p>
+    </footer>
+
+    <a href="https://wa.me/573174485239" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+        <span>¡Hablemos!</span>
+    </a>
+
+    <style>
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            /* Posición izquierda solicitada */
+            background-color: #25d366;
+            color: #FFF;
+            padding: 15px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            z-index: 2000;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+            font-weight: 700;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05) translateY(-5px);
+            background-color: #128c7e;
+        }
+
+        .whatsapp-float span {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .whatsapp-float span {
+                display: none;
+            }
+
+            .whatsapp-float {
+                padding: 15px;
+                border-radius: 50%;
+            }
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+
+        function crearGlobos() {
+            const statsSection = document.querySelector('.stats');
+            const colores = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#D4AF37', '#697184', '#FF9F43', '#F52727', '#B727F5', '#F527A9'];
+            const cantidad = 20; // Número de globos simultáneos
+
+            for (let i = 0; i < cantidad; i++) {
+                const globo = document.createElement('div');
+                globo.className = 'balloon';
+
+                // Color aleatorio
+                const color = colores[Math.floor(Math.random() * colores.length)];
+                globo.style.backgroundColor = color;
+                globo.style.boxShadow = `inset -5px -5px 10px rgba(0,0,0,0.1), 0 5px 10px ${color}44`;
+
+                // Posición horizontal aleatoria
+                globo.style.left = Math.random() * 100 + '%';
+
+                // Velocidad aleatoria (entre 8 y 15 segundos para que suban lento)
+                const duracion = Math.random() * 7 + 8;
+                globo.style.animationDuration = duracion + 's';
+
+                // Retraso aleatorio para que no salgan todos a la vez
+                globo.style.animationDelay = Math.random() * 10 + 's';
+
+                // Tamaño aleatorio
+                const size = Math.random() * 20 + 30;
+                globo.style.width = size + 'px';
+                globo.style.height = (size * 1.2) + 'px';
+
+                statsSection.appendChild(globo);
+            }
+        }
+
+        // Ejecutar cuando cargue la página
+        document.addEventListener('DOMContentLoaded', crearGlobos);
+
+    </script>
+
+    <script>
+        const canvasServ = document.getElementById('canvas-codigo');
+        const ctxServ = canvasServ.getContext('2d');
+
+        function resizeCanvas() {
+            const section = document.getElementById('servicios');
+            canvasServ.width = section.offsetWidth;
+            canvasServ.height = section.offsetHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Caracteres más técnicos y variados
+        const chars = "010101<>[]{}/_+=*^$#!@&KODEVA";
+        const fontSize = 14; // Letras más pequeñas = más elegante
+        const columns = canvasServ.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function draw() {
+            // El rastro negro debe ser muy transparente para que se vea fluido
+            ctxServ.fillStyle = "rgba(13, 13, 13, 0.1)";
+            ctxServ.fillRect(0, 0, canvasServ.width, canvasServ.height);
+
+            // Color del código: Verde terminal suave o Dorado
+            ctxServ.fillStyle = "#00FF41"; // Verde Matrix clásico pero nítido
+            ctxServ.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+
+                // Dibujamos el caracter
+                ctxServ.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // Reinicio de la gota con aleatoriedad para que no bajen todas iguales
+                if (drops[i] * fontSize > canvasServ.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        // 33ms es la velocidad ideal para que se vea suave
+        setInterval(draw, 33);
+    </script>
+
+    <script>
+
+        function iniciarFigurasNosotros() {
+            const contenedor = document.getElementById('bg-nosotros');
+            if (!contenedor) return;
+
+            const tipos = ['square', 'circle', 'triangle'];
+
+            // Nueva paleta: Dorados, Plateados, Azules y Grises de marca
+            const colores = ['#D4AF37', '#C0C0C0', '#697184', '#B1A6A4', '#D8CFD0', '#413F3D'];
+            const cantidad = 40; // ¡Aumentado de 12 a 40 figuras!
+
+            for (let i = 0; i < cantidad; i++) {
+                const shape = document.createElement('div');
+                const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+                const color = colores[Math.floor(Math.random() * colores.length)];
+                const size = Math.random() * 60 + 30; // Tamaños entre 30px y 90px
+
+                shape.className = 'shape';
+                shape.style.width = `${size}px`;
+                shape.style.height = `${size}px`;
+
+                // Posiciones verticales aleatorias
+                shape.style.top = `${Math.random() * 100}%`;
+
+                // Retrasos aleatorios para que fluyan constantemente
+                shape.style.left = `-${Math.random() * 100}vw`;
+
+                // Velocidades aleatorias entre 5s y 12s para que unas rebasen a otras
+                const speed = Math.random() * 7 + 5;
+                shape.style.animationDuration = `${speed}s`;
+                shape.style.animationDelay = `${Math.random() * 10}s`;
+
+                if (tipo === 'circle') {
+                    shape.style.borderRadius = '50%';
+                    shape.style.backgroundColor = color;
+                } else if (tipo === 'square') {
+                    shape.style.backgroundColor = color;
+                    shape.style.borderRadius = '4px';
+                    shape.style.transform = `rotate(${Math.random() * 360}deg)`;
+                } else if (tipo === 'triangle') {
+                    shape.style.width = '0';
+                    shape.style.height = '0';
+                    shape.style.borderLeft = `${size / 2}px solid transparent`;
+                    shape.style.borderRight = `${size / 2}px solid transparent`;
+                    shape.style.borderBottom = `${size}px solid ${color}`;
+                }
+
+                contenedor.appendChild(shape);
+            }
+        }
+
+        // Asegurarse de que corra al cargar
+        window.addEventListener('load', iniciarFigurasNosotros);
+    </script>
+
+    <script>
+
+        const canvasRayos = document.getElementById('canvas-rayos');
+        const ctxRayos = canvasRayos.getContext('2d');
+        let rayoInterval;
+
+        function redimensionarCanvas() {
+            canvasRayos.width = canvasRayos.offsetWidth;
+            canvasRayos.height = canvasRayos.offsetHeight;
+        }
+
+        window.addEventListener('resize', redimensionarCanvas);
+        redimensionarCanvas();
+
+        function crearRayo() {
+            const colores = ['#ffffff', '#C0C0C0', '#D4AF37']; // Blanco, Plata, Oro
+            const color = colores[Math.floor(Math.random() * colores.length)];
+
+            let x = Math.random() * canvasRayos.width;
+            let y = 0; // Empiezan desde arriba de la sección
+
+            ctxRayos.strokeStyle = color;
+            ctxRayos.lineWidth = 2;
+            ctxRayos.shadowBlur = 15;
+            ctxRayos.shadowColor = color;
+
+            ctxRayos.beginPath();
+            ctxRayos.moveTo(x, y);
+
+            while (y < canvasRayos.height) {
+                x += (Math.random() - 0.5) * 40; // Zigzag horizontal
+                y += Math.random() * 20;         // Avance vertical
+                ctxRayos.lineTo(x, y);
+            }
+            ctxRayos.stroke();
+
+            // Desvanecimiento gradual del rayo
+            setTimeout(() => {
+                ctxRayos.clearRect(0, 0, canvasRayos.width, canvasRayos.height);
+            }, 80);
+        }
+
+        function iniciarRayos() {
+            rayoInterval = setInterval(() => {
+                if (Math.random() > 0.7) { // Probabilidad de disparo
+                    crearRayo();
+                }
+            }, 80);
+        }
+
+        function detenerRayos() {
+            clearInterval(rayoInterval);
+            ctxRayos.clearRect(0, 0, canvasRayos.width, canvasRayos.height);
+        }
+
+        // Observer para activar solo cuando sea visible
+        const observerRayos = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    iniciarRayos();
+                } else {
+                    detenerRayos();
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observerRayos.observe(document.getElementById('porque-elegirnos'));
+
+    </script>
+
+    <script>
+        let intervalFuegos; // Variable para controlar el bucle
+
+        function lanzarFuegosContinuos() {
+            const duration = Infinity; // Lo manejaremos manualmente con el intervalo
+            const defaults = { startVelocity: 25, spread: 360, ticks: 50, zIndex: 0, scalar: 0.6 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            // Creamos el intervalo de explosiones cada 400ms
+            intervalFuegos = setInterval(function () {
+                // Explosión lado izquierdo
+                confetti({
+                    ...defaults,
+                    particleCount: 30,
+                    origin: { x: randomInRange(0.1, 0.3), y: randomInRange(0.3, 0.6) },
+                    colors: ['#D4AF37', '#B1A6A4', '#697184'] // Dorado y tu paleta
+                });
+                // Explosión lado derecho
+                confetti({
+                    ...defaults,
+                    particleCount: 30,
+                    origin: { x: randomInRange(0.7, 0.9), y: randomInRange(0.3, 0.6) },
+                    colors: ['#D4AF37', '#ffffff']
+                });
+            }, 450); // Frecuencia de las explosiones
+        }
+
+        function detenerFuegos() {
+            clearInterval(intervalFuegos);
+        }
+
+        // Observador Inteligente
+        const seccionTestimonios = document.getElementById('testimonios');
+
+        const observerFuegos = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Si el usuario entra en la sección, empiezan los fuegos
+                    lanzarFuegosContinuos();
+                } else {
+                    // Si el usuario sale de la sección, se detienen inmediatamente
+                    detenerFuegos();
+                }
+            });
+        }, { threshold: 0.2 }); // Se activa cuando se ve al menos el 20% de la sección
+
+        observerFuegos.observe(seccionTestimonios);
+    </script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (window.scrollY / scrollTotal) * 100;
+            scrollProgress.style.width = progress + '%';
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Counter animation
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+        let animated = false;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const increment = target / speed;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(() => animateCounters(), 1);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        };
+
+        window.addEventListener('scroll', () => {
+            const statsSection = document.querySelector('.stats');
+            const statsPosition = statsSection.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.3;
+
+            if (statsPosition < screenPosition && !animated) {
+                animateCounters();
+                animated = true;
+            }
+        });
+
+        // Contact form submission
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('¡Gracias por tu mensaje! Te contactaré pronto.');
+            contactForm.reset();
+        });
+
+        // 3D Canvas Animation
+        const canvas = document.getElementById('canvas3d');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.z = Math.random() * 1000;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.speedZ = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.z -= this.speedZ;
+                if (this.z <= 0) {
+                    this.z = 1000;
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                }
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                const scale = 1000 / (1000 + this.z);
+                const x2d = (this.x - canvas.width / 2) * scale + canvas.width / 2;
+                const y2d = (this.y - canvas.height / 2) * scale + canvas.height / 2;
+                const size2d = this.size * scale;
+
+                ctx.fillStyle = `rgba(105, 113, 132, ${1 - this.z / 1000})`;
+                ctx.beginPath();
+                ctx.arc(x2d, y2d, size2d, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const particles = [];
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(242, 241, 239, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Connect nearby particles
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        ctx.strokeStyle = `rgba(105, 113, 132, ${0.2 - distance / 750})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Mouse parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+
+            document.querySelector('.hero-content').style.transform =
+                `translate(${moveX}px, ${moveY}px)`;
+        });
+
+        // Service cards 3D tilt effect
+        const serviceCards = document.querySelectorAll('.service-card');
+        serviceCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // Add floating animation to project cards
+        const projectCards = document.querySelectorAll('.project-card');
+        projectCards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Testimonial cards entrance animation
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.testimonial-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Form validation and enhancement
+        const formInputs = document.querySelectorAll('.form-group input, .form-group textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('focus', function () {
+                this.parentElement.querySelector('label').style.color = '#697184';
+            });
+
+            input.addEventListener('blur', function () {
+                if (!this.value) {
+                    this.parentElement.querySelector('label').style.color = '#413F3D';
+                }
+            });
+        });
+
+        // Add scroll reveal for sections
+        const revealSections = document.querySelectorAll('section');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealSections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 0.8s ease';
+            revealObserver.observe(section);
+        });
+    </script>
+</body>
+
+</html>
