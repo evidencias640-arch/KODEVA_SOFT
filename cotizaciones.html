@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KODEVA - Sistema de Cotización Profesional</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #0a0a1a;
+            --secondary: #141428;
+            --accent: #1e1e3f;
+            --highlight: #533483;
+            --success: #00b894;
+            --danger: #ff4757;
+            --text: #f0f0f0;
+            --text-dark: #9ca3af;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-alt: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-glow: linear-gradient(135deg, #667eea33 0%, #764ba233 100%);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.6); }
+        }
+        
+        @keyframes slideInFromLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInFromRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease;
+            position: relative;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-warning {
+            background: rgba(255, 71, 87, 0.1);
+            border: 2px solid var(--danger);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            animation: pulse 2s infinite;
+        }
+        
+        .modal-warning p {
+            color: var(--danger);
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            margin: 0;
+        }
+        
+        .modal-terms {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .modal-terms::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .modal-terms::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        .modal-terms::-webkit-scrollbar-thumb {
+            background: var(--gradient);
+            border-radius: 4px;
+        }
+        
+        .modal-terms h3 {
+            color: #667eea;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-terms h3:first-child {
+            margin-top: 0;
+        }
+        
+        .modal-terms p, .modal-terms ul {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+        
+        .modal-terms ul {
+            padding-left: 1.5rem;
+        }
+        
+        .modal-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+        
+        .modal-checkbox input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+        
+        .modal-checkbox label {
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        
+        .modal-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .modal-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .modal-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(26, 26, 30, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+            animation: slideInFromLeft 0.6s ease;
+        }
+        
+        .logo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            animation: glow 3s infinite, float 3s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .brand-text h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .brand-text p {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .hero h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--secondary);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .step.active {
+            background: var(--gradient);
+            transform: scale(1.05);
+            border-color: #667eea;
+            animation: pulse 2s infinite;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .service-card {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-glow);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+        
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s ease;
+            z-index: 0;
+        }
+        
+        .service-card:hover::before {
+            opacity: 1;
+        }
+        
+        .service-card:hover::after {
+            left: 100%;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            border-color: #667eea;
+        }
+        
+        .service-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            animation: pulse 2s infinite;
+        }
+        
+        .service-card.selected::before {
+            opacity: 1;
+        }
+        
+        .service-card > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: float 3s ease-in-out infinite;
+            display: inline-block;
+        }
+        
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .service-card p {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .price-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--gradient);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .subsection {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--secondary);
+            border-radius: 16px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        .subsection h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #667eea;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .range-container {
+            margin-top: 1rem;
+        }
+        
+        .range-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: var(--accent);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--gradient);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        
+        .range-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--gradient);
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .range-slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+        
+        .range-value {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+        
+        .range-current {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: var(--gradient);
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        
+        .btn {
+            padding: 1.2rem 3rem;
+            background: var(--gradient);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+        
+        .btn:active {
+            transform: translateY(-2px);
+        }
+        
+        .btn i {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            margin-right: 1rem;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+        
+        .quote-summary {
+            background: var(--secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-top: 2rem;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .quote-summary h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #667eea;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .summary-item:hover {
+            background: rgba(102, 126, 234, 0.05);
+            padding-left: 1rem;
+            padding-right: 1rem;
+            border-radius: 8px;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .total-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin: 2rem 0;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Poppins', sans-serif;
+            animation: pulse 2s infinite;
+        }
+        
+        .success-animation {
+            display: none;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .success-animation.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        .checkmark {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--gradient);
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.5s ease;
+        }
+        
+        .checkmark i {
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .keyword {
+            padding: 0.4rem 1rem;
+            background: var(--accent);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #667eea;
+            border: 1px solid #667eea;
+            animation: fadeInUp 0.3s ease;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 3px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #667eea;
+            animation: slideInFromLeft 0.5s ease;
+        }
+        
+        .info-box i {
+            color: #667eea;
+            margin-right: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+            }
+            
+            .btn-secondary {
+                margin-right: 0;
+            }
+            
+            .modal-content {
+                padding: 2rem;
+                width: 95%;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .logo-container {
+                padding: 0 1rem;
+            }
+            
+            .brand-text h1 {
+                font-size: 1.8rem;
+            }
+            
+            .step {
+                padding: 0.6rem 1rem;
+            }
+            
+            .step span {
+                font-size: 0.9rem;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Modal de Términos y Condiciones -->
+    <div class="modal-overlay" id="termsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚠️ Términos y Condiciones</h2>
+            </div>
+            
+            <div class="modal-warning">
+                <p><i class="fas fa-exclamation-triangle"></i> IMPORTANTE: Los valores mostrados en esta cotización son ESTIMACIONES. El precio real será determinado después de una evaluación completa de los requerimientos de su proyecto.</p>
+            </div>
+            
+            <div class="modal-terms">
+                <h3>1. Naturaleza de la Cotización</h3>
+                <p>Esta cotización es una <strong>estimación preliminar</strong> basada en la información proporcionada. El presupuesto final puede variar según:</p>
+                <ul>
+                    <li>Complejidad real del proyecto tras análisis detallado</li>
+                    <li>Requisitos adicionales identificados durante la planificación</li>
+                    <li>Integraciones con sistemas existentes</li>
+                    <li>Necesidades de personalización específicas</li>
+                </ul>
+                
+                <h3>2. Proceso de Evaluación</h3>
+                <p>Nuestro equipo realizará una <strong>evaluación completa</strong> de su proyecto que incluye:</p>
+                <ul>
+                    <li>Análisis de requerimientos funcionales y técnicos</li>
+                    <li>Estimación de tiempos de desarrollo</li>
+                    <li>Identificación de recursos necesarios</li>
+                    <li>Definición de entregables y cronograma</li>
+                </ul>
+                
+                <h3>3. Validez de la Cotización</h3>
+                <p>Esta estimación tiene una validez de <strong>30 días</strong> y está sujeta a confirmación tras la evaluación técnica.</p>
+                
+                <h3>4. Compromiso de Transparencia</h3>
+                <p>KODEVA se compromete a mantener total transparencia en la cotización final, explicando cualquier variación respecto a esta estimación inicial.</p>
+                
+                <h3>5. Confidencialidad</h3>
+                <p>Toda la información proporcionada será tratada de forma <strong>confidencial</strong> y utilizada exclusivamente para el proceso de cotización.</p>
+            </div>
+            
+            <div class="modal-checkbox">
+                <input type="checkbox" id="acceptTerms">
+                <label for="acceptTerms">He leído y acepto que esta es una estimación sujeta a evaluación técnica</label>
+            </div>
+            
+            <button class="modal-btn" id="acceptBtn" disabled>
+                <i class="fas fa-check-circle"></i> Aceptar y Continuar
+            </button>
+        </div>
+    </div>
+
+    <header class="header animate__animated animate__fadeInDown">
+        <div class="logo-container">
+            <div class="logo">K</div>
+            <div class="brand-text">
+                <h1>KODEVA</h1>
+                <p>Soluciones Tecnológicas Empresariales</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero animate__animated animate__fadeIn">
+        <h2>
+            Cotizador de Proyectos Digitales</h2>
+        <p>Obtén una estimación instantánea para tu próximo salto tecnológico con KODEVA.</p>
+    </section>
+
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="step-indicator">
+            <div class="step active" id="dot1">
+                <div class="step-number">1</div>
+                <span>Servicio</span>
+            </div>
+            <div class="step" id="dot2">
+                <div class="step-number">2</div>
+                <span>Detalles</span>
+            </div>
+            <div class="step" id="dot3">
+                <div class="step-number">3</div>
+                <span>Contacto</span>
+            </div>
+            <div class="step" id="dot4">
+                <div class="step-number">4</div>
+                <span>Resumen</span>
+            </div>
+        </div>
+
+        <div class="section active" id="step1">
+            <div class="service-grid">
+                <div class="service-card" data-category="programacion" data-price="1200">
+                    <div class="service-icon"><i class="fas fa-code"></i></div>
+                    <h3>Desarrollo Web</h3>
+                    <p>Sistemas a medida, E-commerce y plataformas escalables.</p>
+                    <div class="price-tag">Desde $1,200</div>
+                </div>
+                <div class="service-card" data-category="apps" data-price="2500">
+                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>App Móvil</h3>
+                    <p>Aplicaciones nativas e híbridas para iOS y Android.</p>
+                    <div class="price-tag">Desde $2,500</div>
+                </div>
+                <div class="service-card" data-category="ciber" data-price="1800">
+                    <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Ciberseguridad</h3>
+                    <p>Auditorías, Pentesting y protección de infraestructura.</p>
+                    <div class="price-tag">Desde $1,800</div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn" onclick="nextStep()">Continuar <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="section" id="step2">
+            <div class="subsection">
+                <h3><i class="fas fa-sliders-h"></i> Personaliza tu requerimiento</h3>
+                <div class="form-group">
+                    <label>Nivel de Complejidad Estimado:</label>
+                    <input type="range" min="1" max="5" value="3" class="range-slider" id="complexity">
+                    <div class="range-value">
+                        <span>Básico</span>
+                        <span class="range-current" id="complexityValue">Nivel 3</span>
+                        <span>Avanzado</span>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i> Cada nivel de complejidad añade un 20% al valor base del servicio.
+                </div>
+                <div class="form-group">
+                    <label>Descripción breve (Opcional):</label>
+                    <textarea id="projectDesc" rows="3" placeholder="Cuéntanos un poco más sobre tu idea..."></textarea>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                <button class="btn" onclick="calculateQuote()">Calcular Presupuesto</button>
+            </div>
+        </div>
+
+        <div class="section" id="step3">
+            <div class="subsection">
+                <h3><i class="fas fa-user-tie"></i> Información del Cliente</h3>
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="clientName" placeholder="Ej. Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="clientEmail" placeholder="juan@empresa.com">
+                </div>
+                <div class="form-group">
+                    <label>Empresa / Organización</label>
+                    <input type="text" id="clientCompany" placeholder="Nombre de tu empresa">
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                <button class="btn" onclick="nextStep()">Ver Resumen</button>
+            </div>
+        </div>
+
+        <div class="section" id="step4">
+            <div class="quote-summary">
+                <h3>Resumen de Cotización</h3>
+                <div id="summaryContent"></div>
+                <div class="total-price" id="totalPrice">$0 USD</div>
+                <div class="btn-container">
+                    <button class="btn" onclick="generatePDF()">
+                        <i class="fas fa-file-pdf"></i> Descargar PDF Oficial
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="success-animation" id="successScreen">
+            <div class="checkmark"><i class="fas fa-check"></i></div>
+            <h2>¡Cotización Generada!</h2>
+            <p>Se ha descargado un documento PDF con los detalles. Nuestro equipo te contactará pronto.</p>
+            <button class="btn" style="margin-top: 2rem;" onclick="location.reload()">Nueva Cotización</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let selectedService = { name: '', price: 0 };
+        const totalSteps = 4;
+
+        // Modal Logic
+        const modal = document.getElementById('termsModal');
+        const acceptBtn = document.getElementById('acceptBtn');
+        const checkbox = document.getElementById('acceptTerms');
+
+        checkbox.onchange = () => acceptBtn.disabled = !checkbox.checked;
+        acceptBtn.onclick = () => {
+            modal.style.opacity = '0';
+            setTimeout(() => modal.style.display = 'none', 300);
+        };
+
+        // Service Selection
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.onclick = () => {
+                document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedService.name = card.querySelector('h3').innerText;
+                selectedService.price = parseInt(card.dataset.price);
+            };
+        });
+
+        // Range Slider
+        const complexityInput = document.getElementById('complexity');
+        complexityInput.oninput = () => {
+            document.getElementById('complexityValue').innerText = `Nivel ${complexityInput.value}`;
+        };
+
+        function updateProgress() {
+            const fill = document.getElementById('progressFill');
+            fill.style.width = ((currentStep - 1) / (totalSteps - 1)) * 100 + '%';
+            
+            for(let i = 1; i <= totalSteps; i++) {
+                const dot = document.getElementById(`dot${i}`);
+                if(i <= currentStep) dot.classList.add('active');
+                else dot.classList.remove('active');
+            }
+        }
+
+        function nextStep() {
+            if(currentStep === 1 && !selectedService.name) {
+                alert("Por favor selecciona un servicio.");
+                return;
+            }
+            if(currentStep === 3) {
+                if(!document.getElementById('clientName').value || !document.getElementById('clientEmail').value) {
+                    alert("Por favor completa los datos de contacto.");
+                    return;
+                }
+            }
+
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgress();
+        }
+
+        function prevStep() {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgress();
+        }
+
+        function calculateQuote() {
+            const complexity = parseInt(complexityInput.value);
+            // Lógica: 20% adicional por cada nivel arriba de 1
+            const finalPrice = selectedService.price * (1 + (complexity - 1) * 0.20);
+            
+            document.getElementById('totalPrice').innerText = `$${finalPrice.toLocaleString()} USD`;
+            document.getElementById('summaryContent').innerHTML = `
+                <div class="summary-item"><span>Servicio:</span> <strong>${selectedService.name}</strong></div>
+                <div class="summary-item"><span>Complejidad:</span> <strong>Nivel ${complexity}</strong></div>
+                <div class="summary-item"><span>Cliente:</span> <strong>${document.getElementById('clientName').value || 'N/A'}</strong></div>
+            `;
+            nextStep();
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const name = document.getElementById('clientName').value;
+            const price = document.getElementById('totalPrice').innerText;
+
+            // Diseño del PDF
+            doc.setFillColor(10, 10, 26);
+            doc.rect(0, 0, 210, 40, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.text("KODEVA - COTIZACIÓN FORMAL", 20, 25);
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 55);
+            doc.text(`Cliente: ${name}`, 20, 65);
+            doc.text(`Servicio: ${selectedService.name}`, 20, 75);
+            doc.text(`Nivel de Complejidad: ${complexityInput.value}/5`, 20, 85);
+            
+            doc.setFontSize(16);
+            doc.setTextColor(83, 52, 131);
+            doc.text(`TOTAL ESTIMADO: ${price}`, 20, 110);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text("Este documento es una estimación técnica preliminar.", 20, 130);
+            doc.text("Válido por 30 días naturales.", 20, 135);
+
+            doc.save(`Cotizacion_KODEVA_${name}.pdf`);
+            
+            document.getElementById('step4').classList.remove('active');
+            document.getElementById('successScreen').classList.add('active');
+        }
+    </script>
+</body>
+</html>
