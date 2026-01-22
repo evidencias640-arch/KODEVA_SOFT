@@ -814,6 +814,38 @@
             text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
 
+        #proyectos {
+            position: relative;
+            overflow: hidden;
+            /* Degradado profundo con toque púrpura/negro */
+            background: radial-gradient(circle at 50% 50%, #0d0d1a 0%, #050505 100%);
+            padding: 100px 0;
+        }
+
+        #canvas-espacio {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.03) !important;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+            /* Brillo dorado suave al pasar el mouse */
+        }
+
+
         /* Animations */
         @keyframes float {
 
@@ -1692,9 +1724,9 @@
     </section>
 
     <section class="projects" id="proyectos">
+        <canvas id="canvas-espacio"></canvas>
         <h2 class="section-title" data-aos="fade-up">Proyectos Destacados</h2>
         <p class="section-subtitle" data-aos="fade-up">Algunos de mis trabajos más recientes</p>
-
         <div class="projects-grid">
             <div class="project-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="project-image"><i class="fas fa-shopping-cart"></i></div>
@@ -2015,6 +2047,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
     <script>
 
@@ -2075,6 +2108,96 @@
 
         // Ejecutar cuando cargue la página
         document.addEventListener('DOMContentLoaded', crearGlobos);
+
+    </script>
+
+    <script>
+        {
+            const canvas = document.getElementById('canvas-espacio');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            const stars = [];
+            const shootingStars = [];
+            const colors = ['#FFFFFF', '#F5F5DC', '#FFF8E7', '#ECE2D0']; // Blancos y Beiges
+
+            // Crear campo de estrellas estáticas
+            for (let i = 0; i < 250; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.8,
+                    opacity: Math.random(),
+                    blinkSpeed: Math.random() * 0.02,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+
+            function createShootingStar() {
+                shootingStars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * (canvas.height / 2),
+                    len: Math.random() * 80 + 50,
+                    speed: Math.random() * 10 + 5,
+                    opacity: 1
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 1. Dibujar Nebulosa sutil de fondo
+                const nebula = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width);
+                nebula.addColorStop(0, 'rgba(105, 113, 132, 0.05)');
+                nebula.addColorStop(1, 'transparent');
+                ctx.fillStyle = nebula;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // 2. Dibujar Estrellas con parpadeo
+                stars.forEach(s => {
+                    s.opacity += s.blinkSpeed;
+                    if (s.opacity > 1 || s.opacity < 0) s.blinkSpeed *= -1;
+
+                    ctx.globalAlpha = s.opacity;
+                    ctx.fillStyle = s.color;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                ctx.globalAlpha = 1;
+
+                // 3. Dibujar Estrellas Fugaces
+                shootingStars.forEach((ss, index) => {
+                    ctx.strokeStyle = 'rgba(255, 255, 255, ' + ss.opacity + ')';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(ss.x, ss.y);
+                    ctx.lineTo(ss.x - ss.len, ss.y + ss.len);
+                    ctx.stroke();
+
+                    ss.x += ss.speed;
+                    ss.y -= ss.speed;
+                    ss.opacity -= 0.01;
+
+                    if (ss.opacity <= 0) {
+                        shootingStars.splice(index, 1);
+                    }
+                });
+
+                // Crear estrella fugaz aleatoriamente
+                if (Math.random() > 0.993) createShootingStar();
+
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        }
 
     </script>
 
