@@ -91,8 +91,8 @@ English:
 ¿Listo para evolucionar? / Ready to evolve?
 
 - WhatsApp: [¡Hablemos!](https://wa.me/573174485239)
-- LinkedIn: [[Tu Perfil]](https://www.linkedin.com/in/joel-steven-pineda-rincon-b7030519a/)
-- Web: [[Tu URL de Portafolio]](https://evidencias640-arch.github.io/Portafolio-Profesional-Virtual/)
+- LinkedIn: [[Ingresa a mi Perfill]](https://www.linkedin.com/in/joel-steven-pineda-rincon-b7030519a/)
+- Web: [[Revisa mi Portafolio e Informacion Profesional]](https://evidencias640-arch.github.io/Portafolio-Profesional-Virtual/)
 
 ---
 <p align="center">
