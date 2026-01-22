@@ -4,7 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingeniero de Sistemas - Servicios Profesionales</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
+    <title>KODEVA | Software Development, Ingeniería de Sistemas & Web Design Cúcuta</title>
+
+    <meta name="description"
+        content="Expertos en Ingeniería de Sistemas en Cúcuta. Desarrollo de software a medida, sitios web profesionales, redes y IT Support. Custom software solutions, web design, and systems engineering in Colombia.">
+
+    <meta name="keywords"
+        content="Sistemas, Programación, Sitios Web, Software, Redes, Cúcuta, Ingeniería, Desarrollo Web, Diseño Web, Apps, Aplicaciones Móviles, Soporte Técnico, Consultoría IT, Ciberseguridad, Colombia, Software Development, Web Design, Systems Engineering, Programming, Custom Software, Network Solutions, IT Consulting, App Development, Web Hosting, Tech Solutions, Computer Science, Fullstack, Frontend, Backend, Devops">
+
+    <meta property="og:title" content="KODEVA | Soluciones Tecnológicas Globales">
+    <meta property="og:description"
+        content="Lideramos la transformación digital con software de alta calidad y servicios de ingeniería en Cúcuta y el mundo.">
+    <meta property="og:type" content="website">
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap"
         rel="stylesheet">
@@ -1131,6 +1144,10 @@
             color: #0088cc;
         }
 
+        .tech-item i.fa-shopify {
+            color: #50b428;
+        }
+
         .tech-item i.fa-project-diagram {
             color: #ff6d5a;
         }
@@ -1427,7 +1444,6 @@
     <section class="why-choose" id="porque-elegirnos">
         <canvas id="canvas-rayos"></canvas>
         <h2 class="section-title" data-aos="fade-up" style="color: white;">¿Por Qué Elegirnos?</h2>
-        <h2 class="section-title" data-aos="fade-up" style="color: white;">¿Por Qué Elegirnos?</h2>
         <p class="section-subtitle" data-aos="fade-up" style="color: rgba(255,255,255,0.8);">Razones que nos hacen tu
             mejor opción tecnológica</p>
 
@@ -1495,6 +1511,10 @@
                 <div class="tech-item">
                     <i class="fas fa-project-diagram"></i>
                     <span>N8N</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-shopify"></i>
+                    <span>Shopify</span>
                 </div>
                 <div class="tech-item">
                     <i class="fab fa-python"></i>
@@ -1573,6 +1593,10 @@
                 <div class="tech-item">
                     <i class="fas fa-project-diagram"></i>
                     <span>N8N</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-shopify"></i>
+                    <span>Shopify</span>
                 </div>
                 <div class="tech-item">
                     <i class="fab fa-python"></i>
@@ -1854,55 +1878,165 @@
         <p>Cúcuta, Norte de Santander, Colombia</p>
     </footer>
 
-    <a href="https://wa.me/573174485239" class="whatsapp-float" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-        <span>¡Hablemos!</span>
-    </a>
+    <div class="floating-container">
+        <a href="cotizaciones.html" class="float-btn quote-btn">
+            <div class="btn-content">
+                <span class="top-label">SISTEMA</span>
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span class="main-text">COTIZA YA</span>
+            </div>
+        </a>
+
+        <a href="https://wa.me/573174485239" class="float-btn whatsapp-btn" target="_blank">
+            <div class="btn-content">
+                <span class="top-label">SOPORTE</span>
+                <i class="fab fa-whatsapp"></i>
+                <span class="main-text">¡Hablemos!</span>
+            </div>
+        </a>
+    </div>
 
     <style>
-        .whatsapp-float {
+        .floating-container {
             position: fixed;
-            bottom: 30px;
-            left: 30px;
-            /* Posición izquierda solicitada */
-            background-color: #25d366;
-            color: #FFF;
-            padding: 15px 20px;
-            border-radius: 50px;
+            bottom: 25px;
+            left: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+        }
+
+        /* Estilo base para ambos botones */
+        .float-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
             text-decoration: none;
-            z-index: 2000;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
+            color: white;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 4px;
+        }
+
+        /* Iconos */
+        .float-btn i {
+            font-size: 1.4rem;
+        }
+
+        /* Etiquetas de texto */
+        .top-label {
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        .main-text {
+            font-size: 0.65rem;
             font-weight: 700;
         }
 
-        .whatsapp-float:hover {
-            transform: scale(1.05) translateY(-5px);
-            background-color: #128c7e;
+        /* Colores específicos */
+        .quote-btn {
+            background: linear-gradient(135deg, #533483 0%, #1e1e3f 100%);
+            border-color: #667eea;
         }
 
-        .whatsapp-float span {
-            font-size: 0.9rem;
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            animation: pulse-green 2s infinite;
         }
 
-        @media (max-width: 768px) {
-            .whatsapp-float span {
-                display: none;
+        /* Hovers */
+        .float-btn:hover {
+            transform: scale(1.1) translateX(10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .quote-btn:hover {
+            background: #667eea;
+        }
+
+        /* Animación de pulso */
+        @keyframes pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
             }
 
-            .whatsapp-float {
-                padding: 15px;
-                border-radius: 50%;
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Adaptación para móviles */
+        @media (max-width: 768px) {
+            .float-btn {
+                width: 80px;
+                height: 80px;
+            }
+
+            .float-btn i {
+                font-size: 1.5rem;
+            }
+
+            .top-label {
+                font-size: 0.5rem;
+            }
+
+            .main-text {
+                font-size: 0.65rem;
             }
         }
     </style>
 
+    <section style="display:none;" aria-hidden="true">
+        <h2>Servicios de Ingeniería de Sistemas y Desarrollo de Software</h2>
+        <p>Ofrecemos programación en Cúcuta, diseño de páginas web, gestión de bases de datos y seguridad de redes.</p>
+        <p>Global IT Solutions: Software outsourcing, custom web applications, and systems architecture from Colombia to
+            the world.</p>
+        <p>Expertos en Python, JavaScript, React, PHP, MySQL, AWS y soporte técnico de redes en Norte de Santander.</p>
+    </section>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+
+        // Configuración del título dinámico
+        let blinkingInterval = null;
+        const originalTitle = document.title;
+        const alertTitle = "⚠️ ¡VUELVE PRONTO!"; // Mensaje que parpadea
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Iniciar el parpadeo cuando el cliente se va
+                blinkingInterval = setInterval(() => {
+                    document.title = (document.title === originalTitle) ? alertTitle : originalTitle;
+                }, 800); // Cambia cada segundo
+            } else {
+                // Detener el parpadeo y restaurar título original al volver
+                clearInterval(blinkingInterval);
+                document.title = originalTitle;
+            }
+        });
+
+    </script>
 
     <script>
 
