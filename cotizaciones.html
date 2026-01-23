@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
-    <title>KODEVA | Software Development, Ingeniería de Sistemas & Web Design Cúcuta</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
+    <title>KODEVA - Cotizaciones</title>
 
     <meta name="description"
         content="Expertos en Ingeniería de Sistemas en Cúcuta. Desarrollo de software a medida, sitios web profesionales, redes y IT Support. Custom software solutions, web design, and systems engineering in Colombia.">
@@ -682,6 +683,147 @@
                 margin-right: 0;
             }
         }
+
+        /* Contenedor principal - Bajamos el gap para unirlos más */
+        .menu-flotante-fijo {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            /* Reducido de 35px a 12px para que estén cerca */
+            z-index: 10000;
+        }
+
+        .contenedor-flotante {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Botones un poco más compactos */
+        .boton-f {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            animation: parpadeoElectrico 2s infinite alternate;
+        }
+
+        /* Texto debajo - Pegado al botón */
+        .etiqueta-debajo {
+            margin-top: 5px;
+            /* Reducido para que el nombre esté justo debajo */
+            font-size: 9px;
+            /* Un poco más pequeño para que no choque */
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2px 8px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: 0.3s;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            pointer-events: none;
+            /* Evita que el texto interfiera con el mouse */
+        }
+
+        /* Los colores se mantienen igual, pero con el brillo optimizado */
+        .estilo-asesoria {
+            background: #8E2DE2;
+            box-shadow: 0 0 15px #8E2DE2;
+        }
+
+        .estilo-empresa {
+            background: #00d2ff;
+            box-shadow: 0 0 15px #00d2ff;
+        }
+
+        .estilo-cv {
+            background: #fce38a;
+            color: #000;
+            box-shadow: 0 0 15px #fce38a;
+        }
+
+        /* Animación de parpadeo */
+        @keyframes parpadeoElectrico {
+
+            0%,
+            100% {
+                opacity: 1;
+                filter: brightness(1.1);
+            }
+
+            92% {
+                opacity: 1;
+            }
+
+            94% {
+                opacity: 0.6;
+            }
+
+            96% {
+                opacity: 1;
+            }
+        }
+
+        /* Al pasar el mouse se expande sin chocar con el otro */
+        .contenedor-flotante:hover .boton-f {
+            transform: scale(1.15);
+            filter: brightness(1.4);
+            animation: none;
+            box-shadow: 0 0 30px white;
+            z-index: 10;
+        }
+
+        .contenedor-flotante:hover .etiqueta-debajo {
+            opacity: 1;
+        }
+
+        /* AJUSTES PARA MÓVILES (Celulares) */
+        @media (max-width: 480px) {
+            .menu-flotante-fijo {
+                right: 8px;
+                /* Casi pegado al borde derecho */
+                gap: 8px;
+                /* Súper pegaditos entre ellos */
+            }
+
+            .boton-f {
+                width: 48px;
+                /* Botones más pequeños para móvil */
+                height: 48px;
+                font-size: 1.2rem;
+                border-width: 1px;
+                /* Borde más fino para que se vea delicado */
+            }
+
+            .etiqueta-debajo {
+                font-size: 8px;
+                padding: 2px 5px;
+                margin-top: 3px;
+                background: rgba(0, 0, 0, 0.9);
+                /* Más oscuro para que se lea bien lo chiquito */
+            }
+
+            /* Opcional: Si quieres que el parpadeo sea más rápido en móvil para llamar la atención */
+            .boton-f {
+                animation-duration: 1.5s;
+            }
+        }
     </style>
 </head>
 
@@ -746,7 +888,7 @@
 
     <header class="header animate__animated animate__fadeInDown">
         <div class="logo-container">
-            <div class="logo">K</div>
+            <div class="logo">KV</div>
             <div class="brand-text">
                 <h1>KODEVA</h1>
                 <p>Soluciones Tecnológicas Empresariales</p>
@@ -975,6 +1117,30 @@
             </div>
             <button class="btn" onclick="resetForm()" style="margin-top: 2rem;">Nueva Cotización <i
                     class="fas fa-plus"></i></button>
+        </div>
+    </div>
+
+    <div class="menu-flotante-fijo">
+        <div class="contenedor-flotante">
+            <a href="https://evidencias640-arch.github.io/Asesoramiento/index.html" class="boton-f estilo-asesoria">
+                <i class="fas fa-graduation-cap"></i>
+            </a>
+            <span class="etiqueta-debajo">Asesorías</span>
+        </div>
+
+        <div class="contenedor-flotante">
+            <a href="https://evidencias640-arch.github.io/KODEVA_SOFT" class="boton-f estilo-empresa">
+                <i class="fas fa-building"></i>
+            </a>
+            <span class="etiqueta-debajo">Kodeva</span>
+        </div>
+
+        <div class="contenedor-flotante">
+            <a href="https://evidencias640-arch.github.io/Portafolio-Profesional-Virtual/" target="_blank"
+                class="boton-f estilo-cv">
+                <i class="fas fa-user"></i>
+            </a>
+            <span class="etiqueta-debajo">Mi CV</span>
         </div>
     </div>
 
